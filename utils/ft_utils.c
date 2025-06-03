@@ -6,9 +6,13 @@
 /*   By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 14:25:35 by lbellmas          #+#    #+#             */
-/*   Updated: 2025/05/16 14:26:31 by lbellmas         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:24:48 by lbellmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <sys/time.h>
+#include <unistd.h>
+#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {
@@ -33,4 +37,18 @@ int	ft_atoi(const char *nptr)
 		p++;
 	}
 	return (num * sign);
+}
+
+long	ft_get_time(void)
+{
+	struct	timeval	tv;
+	static	time_t	start_time;
+
+	if (start_time == 0)
+	{
+		gettimeofday(&tv, NULL);
+		start_time = ((tv.tv_sec * 1000) + tv.tv_usec /  1000);
+	}
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec * 0.001) - start_time);
 }

@@ -5,43 +5,40 @@
 #                                                     +:+ +:+         +:+      #
 #    By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/16 13:21:34 by lbellmas          #+#    #+#              #
-#    Updated: 2025/05/16 14:27:20 by lbellmas         ###   ########.fr        #
+#    Created: 2025/06/03 14:26:48 by lbellmas          #+#    #+#              #
+#    Updated: 2025/06/03 16:24:39 by lbellmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME       = philo
 BONUS		= philo_bonus
 AR         = ar
 ARFLAGS    = -rcs
 CC         = cc
-CFLAGS     = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS     = -Wall -Wextra -Werror -g #-fsanitize=thread
 OFLAGS     = -MMD -MF $(@:.o=.d)
 
 # Directorios
-SRCDIR     = src
 BSRCDIR		= bonus
-UTILSDIR   = utils
+UTILSDIR   = ../utils
 DEPDIR     = deps
-OBJDIR     = objs
 BOBJDIR		= bonus_obj
+OUTILSDIR	= utils_objects
 
 # Archivos de cabecera
-LIB        = header/ft_pipex.h
+LIB        = header_bonus.h
 
 # Archivos fuente
-SRC        =
 BSRC		= 
 UTILS      = ft_utils.c
 
 # Archivos de objetos
 OBJS       = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 BOBOJ		= $(addprefix $(BOBJDIR)/, $(BSRC:.c=.o))
+OUTILS	= $(addprefix $(OUTILSDIR)/, $(UTILS:.c=.o))
 DEPS       = $(addprefix $(DEPDIR)/, $(SRC:.c=.d) $(UTILS:.c=.d) $(GET:.c=.d))
 
 # Archivo principal
-MAIN       = ft_philo.c
-BMAIN		=
+BMAIN		= ft_philo_bonus.c
 # Colores
 RED        = \033[0;31m
 GREEN      = \033[0;32m
@@ -50,46 +47,43 @@ BLUE       = \033[0;34m
 PURPLE     = \033[0;35m
 CYAN       = \033[0;36m
 RESET      = \033[m
-
-# Objetivo principal
-all: $(NAME) $(LIB) Makefile
-
+all:
+	@printf "make *** No rule no make target''.\n"
 -include $(DEPS)
 
 # Compilación de archivos fuente generales
-$(OBJS): $(OBJDIR)/%.o : $(SRCDIR)/%.c Makefile | $(OBJDIR) $(DEPDIR)
-	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
-	@$(CC) $(CFLAGS) $(OFLAGS) -c $< -o $@
-	@mv $(OBJDIR)/*.d $(DEPDIR)
-
 $(BOBJ): $(BOBJDIR)/%.o : $(BSRCDIR)/%.c Makefile | $(BOBJDIR) $(DEPDIR)
 	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
 	@$(CC) $(CFLAGS) $(OFLAGS) -c $< -o $@
 	@mv $(OBJDIR)/*.d $(DEPDIR)
 
+$(OUTILS): $(OUTILSDIR)/%.o : $(UTILSDIR)/%.c Makefile | $(OUTILSDIR) $(DEPDIR)
+	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
+	@$(CC) $(CFLAGS) $(OFLAGS) -c $< -o $@
+	@mv $(OUTILSDIR)/*.d deps/
+
 # Creación de directorios
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
+$(BOBJDIR):
+	@mkdir -p $(BOBJDIR)
 
 $(DEPDIR):
 	@mkdir -p $(DEPDIR)
 
-# Enlace final del ejecutable
-$(NAME): $(MAIN) $(OBJS)
-	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
-	@$(CC) $(CFLAGS) $(MAIN) $(OBJS) -o $(NAME)
+$(OUTILSDIR):
+	@mkdir -p $(OUTILSDIR)
 
 bonus: $(BONUS) $(LIB) Makefile
 
-$(BONUS): $(BMAIN) $(BOBJ)
+$(BONUS): $(BMAIN) $(BOBJ) $(OUTILS)
 	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
-	@$(CC) $(CFLAGS) $(BMAIN) $(BOBJ) -o $(BONUS)
+	@$(CC) $(CFLAGS) $(BMAIN) $(BOBJ) $(OUTILS) -o $(BONUS)
 
 # Limpiar objetos y dependencias
 clean:
 	@printf "%b" "$(BLUE)Cleaning objects...$(RESET)\n"
-	@rm -rf $(OBJDIR)
+	@rm -rf $(BOBJDIR)
 	@rm -rf $(DEPDIR)
+	@rm -rf $(OUTILSDIR)
 
 # Limpiar todo
 fclean: clean
@@ -98,6 +92,6 @@ fclean: clean
 	@rm -rf $(BONUS)
 
 # Reconstrucción total
-re: fclean all
+re: fclean bonus
 
-.PHONY: all clean fclean re $(LIBPRINTF)
+.PHONY: all clean fclean re
