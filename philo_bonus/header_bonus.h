@@ -6,7 +6,7 @@
 /*   By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:03:24 by lbellmas          #+#    #+#             */
-/*   Updated: 2025/06/03 16:26:57 by lbellmas         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:29:19 by lbellmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,17 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include <pthread.h>
 # include <stdlib.h>
+# include <limits.h>
+# include <stdbool.h>
 # include <sys/time.h>
+# include <sys/wait.h>
+# include <pthread.h>
 # include <semaphore.h>
+# include <signal.h>
+# include <fcntl.h>
+# include <string.h>
 
 typedef struct s_rules
 {
@@ -43,6 +51,6 @@ typedef struct s_philo
 } t_philo;
 
 long	ft_get_time(void);
-int	ft_atoi(const char *nptr);
+int		ft_atoi(const char *nptr);
 
 #endif
