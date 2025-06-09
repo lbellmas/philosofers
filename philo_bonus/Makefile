@@ -6,7 +6,7 @@
 #    By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/03 14:26:48 by lbellmas          #+#    #+#              #
-#    Updated: 2025/06/06 15:45:49 by lbellmas         ###   ########.fr        #
+#    Updated: 2025/06/09 13:08:13 by lbellmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ BONUS		= philo_bonus
 AR         = ar
 ARFLAGS    = -rcs
 CC         = cc
-CFLAGS     = -Wall -Wextra -Werror -g #-fsanitize=thread
+CFLAGS     = -Wall -Wextra -Werror -g #-fsanitize=address
 OFLAGS     = -MMD -MF $(@:.o=.d)
 
 # Directorios

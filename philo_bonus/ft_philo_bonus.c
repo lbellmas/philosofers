@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cpy.c                                           :+:      :+:    :+:   */
+/*   ft_philo_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:02:16 by lbellmas          #+#    #+#             */
-/*   Updated: 2025/06/06 15:43:42 by lbellmas         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:27:07 by lbellmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,18 +129,43 @@ void	ft_philos_loop(t_philo *philosopher)
 	if (philosopher->rules->n_philos == 1)
 	{
 		ft_lonely(philosopher->rules->death_time);
+		sem_close(philosopher->rules->forks);
+		sem_close(philosopher->rules->general);
+		free(philosopher->rules);
 		free(philosopher);
 		exit(-2);
 	}
 	if (ft_loop(philosopher) == 1)
 	{
 		sem_post(philosopher->rules->general);
+		sem_close(philosopher->rules->forks);
+		sem_close(philosopher->rules->general);
+		free(philosopher->rules);
 		free(philosopher);
 		exit(-1);
 	}
 	printf("philosopher: %d ate %d times\n", philosopher->n_philo, philosopher->n_meals);
+	sem_close(philosopher->rules->forks);
+	sem_close(philosopher->rules->general);
+	free(philosopher->rules);
 	free(philosopher);
 	exit(0);
+}
+
+t_philo	*ft_clean_philos(t_philo **philos, int n_philo)
+{
+	int		p;
+	t_philo	*save;
+
+	p = 0;
+	while (philos && p < n_philo)
+	{
+		free(philos[p]);
+		p++;
+	}
+	save = philos[p];
+	free(philos);
+	return (save);
 }
 
 t_philo	**ft_philos_create(int n_philos, t_rules *rules)
@@ -161,7 +186,7 @@ t_philo	**ft_philos_create(int n_philos, t_rules *rules)
 		(philos[p])->rules = rules;
 		(philos[p])->pid = fork();
 		if (philos[p]->pid == 0)
-			ft_philos_loop(philos[p]);
+			ft_philos_loop(ft_clean_philos(philos, p));
 		p++;
 	}
 	sem_post(rules->general);
@@ -223,6 +248,10 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (printf("no philosophers\n"), 0);
 	philos = ft_philos_destructor(philos, rules->n_philos);
+	sem_close(rules->forks);
+	sem_close(rules->general);
+	sem_unlink("/forks");
+	sem_unlink("/general");
 	free(rules);
 	rules = NULL;
 	return (printf("end\n"), 0);
