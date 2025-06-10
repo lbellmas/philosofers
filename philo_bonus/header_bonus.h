@@ -6,12 +6,12 @@
 /*   By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:03:24 by lbellmas          #+#    #+#             */
-/*   Updated: 2025/06/06 14:29:19 by lbellmas         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:41:04 by lbellmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_HEADER_BONUS_H
-# define FT_HEADER_BONUS_H
+#ifndef HEADER_BONUS_H
+# define HEADER_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -38,7 +38,7 @@ typedef struct s_rules
 	int			n_meals;
 	int			deaths;
 	long		sim_start;
-} t_rules;
+}	t_rules;
 
 typedef struct s_philo
 {
@@ -46,11 +46,18 @@ typedef struct s_philo
 	int			dead;
 	int			n_meals;
 	long		start_time;
-	int	pid;
+	int			pid;
 	t_rules		*rules;
-} t_philo;
+}	t_philo;
 
 long	ft_get_time(void);
 int		ft_atoi(const char *nptr);
+void	ft_philos_loop(t_philo *philosopher);
+void	ft_death(t_philo **philo);
+void	ft_eat(t_philo **philo);
+void	ft_think(t_philo **philo);
+void	ft_sleep(t_philo **philo);
+void	ft_lonely(int death_time);
+void	ft_kill_all(t_philo **philos, int n_philos);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: lbellmas <lbellmas@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/03 14:26:48 by lbellmas          #+#    #+#              #
-#    Updated: 2025/06/09 13:08:13 by lbellmas         ###   ########.fr        #
+#    Updated: 2025/06/09 14:00:41 by lbellmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,12 @@ OUTILSDIR	= utils_objects
 LIB        = header_bonus.h
 
 # Archivos fuente
-BSRC		= 
+BSRC		= ft_eat.c ft_loop.c ft_assignments.c
 UTILS      = ft_utils.c
 
 # Archivos de objetos
 OBJS       = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
-BOBOJ		= $(addprefix $(BOBJDIR)/, $(BSRC:.c=.o))
+BOBJ		= $(addprefix $(BOBJDIR)/, $(BSRC:.c=.o))
 OUTILS	= $(addprefix $(OUTILSDIR)/, $(UTILS:.c=.o))
 DEPS       = $(addprefix $(DEPDIR)/, $(SRC:.c=.d) $(UTILS:.c=.d) $(GET:.c=.d))
 
@@ -55,7 +55,7 @@ all:
 $(BOBJ): $(BOBJDIR)/%.o : $(BSRCDIR)/%.c Makefile | $(BOBJDIR) $(DEPDIR)
 	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
 	@$(CC) $(CFLAGS) $(OFLAGS) -c $< -o $@
-	@mv $(OBJDIR)/*.d $(DEPDIR)
+	@mv $(BOBJDIR)/*.d deps/
 
 $(OUTILS): $(OUTILSDIR)/%.o : $(UTILSDIR)/%.c Makefile | $(OUTILSDIR) $(DEPDIR)
 	@printf "%-42b%b" "$(PURPLE)$<:" "$(BLUE)$(@F)$(RESET)\n"
